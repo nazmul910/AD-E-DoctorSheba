@@ -21,7 +21,7 @@ export const DoctorsList =()=>{
               return(
                 <>
                   <div key={index} className="border border-indigo-200 rounded-xl max-w-56 overflow-hidden cursor-pointer gorup">
-                    <img className="bg-indigo-50 hover:bg-primary transition-all duration-500 h-[240px] object-cover" src={image} alt="" />
+                    <img className="bg-indigo-50 hover:bg-primary transition-all duration-500 h-[240px] w-full object-cover" src={image} alt="" />
                     <div className="p-4">
                       <p className="text-neutral-800 text-lg font-medium">{name}</p>
                       <p className="text-zinc-600 text-sm">{speciality}</p>
