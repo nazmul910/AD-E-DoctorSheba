@@ -1,14 +1,35 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { AdminContext } from "../../context/AdminContext"
+import {MoonLoader} from 'react-spinners'
+
 
 export const DoctorsList =()=>{
   const {doctors,aToken,getAllDoctors,changeAvailability,deleteDoctor} = useContext(AdminContext);
 
+      const [loading, setLoading] = useState(true);
+
   useEffect(() =>{
-    if(aToken){
-      getAllDoctors()
+    const fetchData = async () => {
+    if (aToken) {
+      setLoading(true); 
+      await getAllDoctors()
+      setLoading(false); 
     }
+  };
+  fetchData();
   },[aToken])
+
+
+   if (loading) {
+  return (
+    <div className="flex justify-center items-center h-[50vh]">
+      <p className="text-gray-500 animate-pulse text-lg">Please wait...</p>
+      <MoonLoader color="#0086db" size={18} speedMultiplier={1} />
+    </div>
+  );
+}
+
+
 
   return(
     <>

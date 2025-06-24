@@ -4,12 +4,14 @@ import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {MoonLoader} from 'react-spinners'
 
 export const DoctorProfile = ()=>{
 
   const {dToken, profileData,setProfileData,getProfileData,backendUrl} = useContext(DoctorContext);
 
   const [isEdit,setIsEdit] = useState(false)
+  const [loading, setLoading] = useState(true);
  
   const updateProfile = async () =>{
     try {
@@ -38,10 +40,23 @@ export const DoctorProfile = ()=>{
 
 
   useEffect(() =>{
-    if(dToken){
-      getProfileData()
+     const fetchData = async () => {
+    if (dToken) {
+      setLoading(true); 
+      await getProfileData()
+      setLoading(false); 
     }
+  };
+  fetchData();
   },[dToken])
+       if (loading) {
+  return (
+    <div className="flex justify-center items-center h-[50vh]">
+      <p className="text-gray-500 animate-pulse text-lg">Please wait...</p>
+      <MoonLoader color="#0086db" size={18} speedMultiplier={1} />
+    </div>
+  );
+}
 
   return profileData &&(
     <>

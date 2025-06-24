@@ -1,20 +1,37 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { DoctorContext } from "../../context/DoctorContext"
 import { useEffect } from "react";
 import { assets } from "../../assets/assets";
 import { AppContext } from "../../context/AppContext";
+import {MoonLoader} from 'react-spinners'
 
 export const DoctorAppointments = () =>{
   const {appointments,getAppointments,dToken,completedAppointment,cancelAppointment} = useContext(DoctorContext);
   const {calculateAge,slotDateFormat} = useContext(AppContext)
 
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(() =>{
-    if(dToken){
-      getAppointments()
+    const fetchData = async () => {
+    if (dToken) {
+      setLoading(true); 
+      await getAppointments()
+      setLoading(false); 
     }
+  };
+  fetchData();
   },[dToken])
+
+     if (loading) {
+  return (
+    <div className="flex justify-center items-center h-[50vh]">
+      <p className="text-gray-500 animate-pulse text-lg">Please wait...</p>
+      <MoonLoader color="#0086db" size={18} speedMultiplier={1} />
+    </div>
+  );
+}
+
+
   return(
     <>
     <div className="w-full max-w-6xl m-5">

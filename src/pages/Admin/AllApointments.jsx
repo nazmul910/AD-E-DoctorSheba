@@ -1,22 +1,40 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { AdminContext } from "../../context/AdminContext"
 import { useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
 import { assets } from "../../assets/assets";
+import {MoonLoader} from 'react-spinners'
 
 export const AllApointment = () =>{
   const {aToken,appointments,getAllAppointments,cancelAppointment} = useContext(AdminContext);
   const {calculateAge,slotDateFormat} = useContext(AppContext)
 
-
+    const [loading, setLoading] = useState(true);
 
 
 
   useEffect(() =>{
-    if(aToken){
-      getAllAppointments()
+    const fetchData = async () => {
+    if (aToken) {
+      setLoading(true); 
+      await getAllAppointments() 
+      setLoading(false); 
     }
+  };
+  fetchData();
   },[aToken])
+
+
+  if (loading) {
+  return (
+    <div className="flex justify-center items-center h-[50vh]">
+      <p className="text-gray-500 animate-pulse text-lg">Please wait...</p>
+      <MoonLoader color="#0086db" size={18} speedMultiplier={1} />
+    </div>
+  );
+}
+
+
   return(
     <>
       <div className="w-full max-w-6xl m-5">

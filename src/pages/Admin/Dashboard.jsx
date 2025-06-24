@@ -1,21 +1,38 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { AdminContext } from "../../context/AdminContext"
 import { useEffect } from "react"
 import { assets } from "../../assets/assets"
 import { AppContext } from "../../context/AppContext"
+import {MoonLoader} from 'react-spinners'
 
 export const Dashboard = () =>{
   const {aToken,cancelAppointment,dashData,getDashData} = useContext(AdminContext) 
   const {slotDateFormat} = useContext(AppContext)
 
+  const [loading, setLoading] = useState(true);
 
 
 
-  useEffect(() =>{
-    if(aToken){
-      getDashData()
+useEffect(() => {
+  const fetchData = async () => {
+    if (aToken) {
+      setLoading(true); 
+      await getDashData(); 
+      setLoading(false); 
     }
-  },[aToken])
+  };
+  fetchData();
+}, [aToken]);
+
+  if (loading) {
+  return (
+    <div className="flex justify-center items-center h-[50vh]">
+      <p className="text-gray-500 animate-pulse text-lg">Please wait...</p>
+      <MoonLoader color="#0086db" size={18} speedMultiplier={1} />
+    </div>
+  );
+}
+
   return dashData && (
     <>
       <div className="m-5">

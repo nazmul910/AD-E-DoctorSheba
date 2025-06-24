@@ -2,16 +2,32 @@ import { useContext, useEffect, useState } from "react"
 import { DoctorContext } from "../../context/DoctorContext"
 import { AppContext } from "../../context/AppContext"
 import { assets } from "../../assets/assets"
+import {MoonLoader} from 'react-spinners'
 
 export const DoctorDashboard =()=>{
   const {dToken,getDashData,dashData,setDashData,completedAppointment,cancelAppointment} = useContext(DoctorContext)
   const {slotDateFormat} = useContext(AppContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(()=>{
-    if(dToken){
-      getDashData()
+    const fetchData = async () => {
+    if (dToken) {
+      setLoading(true); 
+      await getDashData()
+      setLoading(false); 
     }
+  };
+  fetchData();
   },[dToken])
+
+       if (loading) {
+  return (
+    <div className="flex justify-center items-center h-[50vh]">
+      <p className="text-gray-500 animate-pulse text-lg">Please wait...</p>
+      <MoonLoader color="#0086db" size={18} speedMultiplier={1} />
+    </div>
+  );
+}
 
 
   return dashData &&(
